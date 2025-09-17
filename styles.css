@@ -244,8 +244,8 @@ body::before {
 }
 
 .radio-option input[type="radio"]:checked + .radio-custom {
-    border-color: #ff6b6b;
-    background: #ff6b6b;
+    border-color: #28a745;
+    background: #28a745;
 }
 
 .radio-option input[type="radio"]:checked + .radio-custom::after {
@@ -258,6 +258,22 @@ body::before {
     height: 8px;
     background: white;
     border-radius: 50%;
+}
+
+.radio-option input[type="radio"]:checked ~ .radio-text {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.radio-option input[type="radio"]:checked {
+    /* Resaltar toda la opción cuando está seleccionada */
+}
+
+.radio-option.selected {
+    border-color: #28a745 !important;
+    background: linear-gradient(135deg, #f0fff4, #e8f5e8) !important;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1) !important;
+    transform: scale(1.02);
 }
 
 .radio-text {

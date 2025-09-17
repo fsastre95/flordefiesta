@@ -254,16 +254,27 @@
 
     <script>
         let confirmations = [];
+        
+        // URL de tu Google Apps Script (REEMPLAZA CON TU URL)
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby7Ts7DPLdlzb-6WhQ-5JulQqfpMvN86gix7S7orQBM2pNO2M6vyheGDuskLuZnAv1C4g/exec';
 
-        function loadData() {
+        async function loadData() {
             try {
-                const data = localStorage.getItem('birthdayConfirmations');
-                confirmations = data ? JSON.parse(data) : [];
+                const response = await fetch(GOOGLE_SCRIPT_URL);
+                const result = await response.json();
+                
+                if (result.success) {
+                    confirmations = result.data || [];
+                } else {
+                    throw new Error(result.message);
+                }
+                
                 updateStats();
                 displayConfirmations();
             } catch (error) {
                 console.error('Error al cargar datos:', error);
                 confirmations = [];
+                showNotification('Error al cargar datos: ' + error.message, 'error');
             }
         }
 
@@ -378,11 +389,12 @@
 
         function clearData() {
             if (confirm('¿Estás seguro de que quieres eliminar todas las confirmaciones? Esta acción no se puede deshacer.')) {
-                localStorage.removeItem('birthdayConfirmations');
+                // Nota: Para limpiar datos en Google Sheets, necesitarías agregar una función específica
+                // Por ahora, solo limpiamos la vista local
                 confirmations = [];
                 updateStats();
                 displayConfirmations();
-                showNotification('Datos eliminados', 'success');
+                showNotification('Datos eliminados de la vista (para eliminar de Google Sheets, ve a la hoja de cálculo)', 'success');
             }
         }
 

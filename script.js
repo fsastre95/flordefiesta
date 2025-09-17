@@ -8,6 +8,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Mostrar/ocultar campo de acompañantes según la respuesta
     attendanceRadios.forEach(radio => {
         radio.addEventListener('change', function() {
+            // Remover clase selected de todas las opciones
+            document.querySelectorAll('.radio-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Agregar clase selected a la opción seleccionada
+            this.closest('.radio-option').classList.add('selected');
+            
             if (this.value === 'yes') {
                 accompaniedGroup.style.display = 'block';
                 accompaniedGroup.style.animation = 'slideDown 0.3s ease-out';
@@ -91,7 +99,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Manejar envío del formulario
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        
         // Validar todos los campos
         const name = nameInput.value.trim();
         const attendance = document.querySelector('input[name="attendance"]:checked');
@@ -144,8 +151,21 @@ document.addEventListener('DOMContentLoaded', function() {
         form.classList.add('loading');
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
 
-        // Simular envío (aquí podrías integrar con un backend real)
-        setTimeout(() => {
+        // Enviar datos a Google Sheets
+        sendToGoogleSheets();
+    });
+
+    // URL de tu Google Apps Script (REEMPLAZA CON TU URL)
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby7Ts7DPLdlzb-6WhQ-5JulQqfpMvN86gix7S7orQBM2pNO2M6vyheGDuskLuZnAv1C4g/exec';
+    
+    async function sendToGoogleSheets() {
+        try {
+            // Recopilar datos del formulario
+            const name = nameInput.value.trim();
+            const attendance = document.querySelector('input[name="attendance"]:checked');
+            const accompanied = document.getElementById('accompanied').value;
+            const message = document.getElementById('message').value.trim();
+
             // Recopilar nombres de acompañantes
             const accompaniedNames = [];
             if (attendance.value === 'yes' && parseInt(accompanied) > 0) {
@@ -167,58 +187,59 @@ document.addEventListener('DOMContentLoaded', function() {
                 timestamp: new Date().toISOString()
             };
 
-            // Aquí podrías enviar los datos a un servidor
-            console.log('Datos del formulario:', formData);
-            
-            // Simular guardado local (en un caso real, enviarías a un servidor)
-            saveToLocalStorage(formData);
+            // Enviar a Google Sheets
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
 
-            // Mostrar mensaje de éxito
-            form.style.display = 'none';
-            successMessage.style.display = 'block';
-            successMessage.style.animation = 'slideUp 0.6s ease-out';
-
-        }, 2000);
-    });
-
-    function saveToLocalStorage(data) {
-        try {
-            // Obtener datos existentes
-            let existingData = JSON.parse(localStorage.getItem('birthdayConfirmations') || '[]');
+            const result = await response.json();
             
-            // Agregar nuevos datos
-            existingData.push(data);
+            if (result.success) {
+                // Mostrar mensaje de éxito
+                form.style.display = 'none';
+                successMessage.style.display = 'block';
+                successMessage.style.animation = 'slideUp 0.6s ease-out';
+            } else {
+                throw new Error(result.message);
+            }
             
-            // Guardar de vuelta
-            localStorage.setItem('birthdayConfirmations', JSON.stringify(existingData));
-            
-            console.log('Datos guardados localmente:', existingData);
         } catch (error) {
-            console.error('Error al guardar datos:', error);
+            console.error('Error al enviar datos:', error);
+            
+            // Mostrar error y permitir reintentar
+            form.classList.remove('loading');
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Confirmar Asistencia';
+            
+            alert('Error al enviar la confirmación. Por favor, inténtalo de nuevo.');
         }
     }
 
-    // Función para obtener todas las confirmaciones (útil para el anfitrión)
-    window.getConfirmations = function() {
+    // Función para obtener todas las confirmaciones desde Google Sheets
+    window.getConfirmations = async function() {
         try {
-            const data = JSON.parse(localStorage.getItem('birthdayConfirmations') || '[]');
-            console.log('Todas las confirmaciones:', data);
-            return data;
+            const response = await fetch(GOOGLE_SCRIPT_URL);
+            const result = await response.json();
+            
+            if (result.success) {
+                console.log('Todas las confirmaciones:', result.data);
+                return result.data;
+            } else {
+                throw new Error(result.message);
+            }
         } catch (error) {
             console.error('Error al obtener datos:', error);
             return [];
         }
     };
 
-    // Función para limpiar todas las confirmaciones (útil para testing)
-    window.clearConfirmations = function() {
-        localStorage.removeItem('birthdayConfirmations');
-        console.log('Confirmaciones eliminadas');
-    };
-
     // Función para exportar datos como JSON
-    window.exportConfirmations = function() {
-        const data = getConfirmations();
+    window.exportConfirmations = async function() {
+        const data = await getConfirmations();
         const dataStr = JSON.stringify(data, null, 2);
         const dataBlob = new Blob([dataStr], {type: 'application/json'});
         const url = URL.createObjectURL(dataBlob);
