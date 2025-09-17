@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const accompaniedGroup = document.getElementById('accompaniedGroup');
     const attendanceRadios = document.querySelectorAll('input[name="attendance"]');
     const submitBtn = document.querySelector('.submit-btn');
+    const photoSlider = document.getElementById('photoSlider');
+    const headerBg = document.querySelector('.header-bg');
 
     // Mostrar/ocultar campo de acompañantes según la respuesta
     attendanceRadios.forEach(radio => {
@@ -24,6 +26,61 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Slider de fotos (agrega aquí tus URLs locales o remotas)
+    const sliderImages = [
+        'img/1.jpg',
+        'img/2.jpg',
+        'img/3.jpg',
+        'img/5.jpg',
+        'img/6.jpg',
+        'img/7.jpg',
+        'img/8.jpg',
+        'img/9.jpg',
+        'img/10.jpg',
+        'img/11.jpg'
+    ];
+
+    if (photoSlider) {
+        const slides = sliderImages.map((src, idx) => {
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = `Foto ${idx + 1}`;
+            img.className = 'photo-slide' + (idx === 0 ? ' active' : '');
+            photoSlider.appendChild(img);
+            return img;
+        });
+
+        let currentSlideIndex = 0;
+        setInterval(() => {
+            const previous = slides[currentSlideIndex];
+            currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+            const next = slides[currentSlideIndex];
+            if (previous) previous.classList.remove('active');
+            if (next) next.classList.add('active');
+        }, 2000);
+    }
+
+    // Slider de fondo en el header (mismas imágenes)
+    if (headerBg) {
+        const bgSlides = sliderImages.map((src, idx) => {
+            const div = document.createElement('div');
+            div.className = 'bg-slide' + (idx === 0 ? ' active' : '');
+            div.style.backgroundImage = `url(${src})`;
+            div.dataset.src = src;
+            headerBg.appendChild(div);
+            return div;
+        });
+
+        let currentBgIndex = 0;
+        setInterval(() => {
+            const prev = bgSlides[currentBgIndex];
+            currentBgIndex = (currentBgIndex + 1) % bgSlides.length;
+            const next = bgSlides[currentBgIndex];
+            if (prev) prev.classList.remove('active');
+            if (next) next.classList.add('active');
+        }, 2000);
+    }
 
     // Validación en tiempo real
     const nameInput = document.getElementById('name');
