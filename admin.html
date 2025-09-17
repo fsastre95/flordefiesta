@@ -41,7 +41,7 @@
         .stat-number {
             font-size: 2rem;
             font-weight: 700;
-            color: #ff6b6b;
+            color: #9f585e;
             margin-bottom: 5px;
         }
         
@@ -264,7 +264,7 @@
                 const result = await response.json();
                 
                 if (result.success) {
-                    confirmations = result.data || [];
+                    confirmations = normalizeData(result.data || []);
                 } else {
                     throw new Error(result.message);
                 }
@@ -276,6 +276,33 @@
                 confirmations = [];
                 showNotification('Error al cargar datos: ' + error.message, 'error');
             }
+        }
+
+        function normalizeData(raw) {
+            return (raw || []).map(item => {
+                const rawAttendance = (item.attendance ?? item.asistencia ?? '').toString().toLowerCase();
+                const isYes = ['yes', 'sí', 'si', 'true', '1', 'va', 'va a ir', '✓'].includes(rawAttendance);
+                
+                const accompanied =
+                    item.accompanied ??
+                    item['acompañantes'] ??
+                    item.acompanantes ??
+                    '0';
+
+                const accompaniedNames =
+                    item.accompaniedNames ??
+                    item['nombresacompañantes'] ??
+                    [];
+
+                return {
+                    name: item.name ?? item.nombre ?? '',
+                    attendance: isYes ? 'yes' : 'no',
+                    accompanied: accompanied,
+                    accompaniedNames: Array.isArray(accompaniedNames) ? accompaniedNames : String(accompaniedNames || '').split('; ').filter(Boolean),
+                    message: item.message ?? item.mensaje ?? 'Sin mensaje',
+                    timestamp: item.timestamp ?? item.fecha ?? new Date().toISOString()
+                };
+            });
         }
 
         function updateStats() {

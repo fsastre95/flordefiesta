@@ -24,8 +24,8 @@ body::before {
     width: 100%;
     height: 100%;
     background: 
-        radial-gradient(circle at 20% 80%, rgba(255, 107, 107, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255, 142, 142, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(159, 88, 94, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(159, 88, 94, 0.3) 0%, transparent 50%),
         radial-gradient(circle at 40% 40%, rgba(102, 126, 234, 0.2) 0%, transparent 50%);
     z-index: -1;
     animation: backgroundShift 20s ease-in-out infinite;
@@ -63,7 +63,7 @@ body::before {
 }
 
 .header {
-    background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+    background: linear-gradient(135deg, #9f585e, #9f585e);
     color: white;
     text-align: center;
     padding: 30px 20px;
@@ -133,7 +133,7 @@ body::before {
 }
 
 .detail-item i {
-    color: #ff6b6b;
+    color: #9f585e;
     margin-right: 12px;
     width: 20px;
     text-align: center;
@@ -171,8 +171,8 @@ body::before {
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #ff6b6b;
-    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+    border-color: #9f585e;
+    box-shadow: 0 0 0 3px rgba(159, 88, 94, 0.1);
 }
 
 .form-group textarea {
@@ -197,8 +197,8 @@ body::before {
 
 .accompanied-field input:focus {
     outline: none;
-    border-color: #ff6b6b;
-    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+    border-color: #9f585e;
+    box-shadow: 0 0 0 3px rgba(159, 88, 94, 0.1);
     background: white;
 }
 
@@ -225,7 +225,7 @@ body::before {
 }
 
 .radio-option:hover {
-    border-color: #ff6b6b;
+    border-color: #9f585e;
     background: #fff5f5;
 }
 
@@ -266,7 +266,6 @@ body::before {
 }
 
 .radio-option input[type="radio"]:checked {
-    /* Resaltar toda la opción cuando está seleccionada */
 }
 
 .radio-option.selected {
@@ -283,7 +282,7 @@ body::before {
 
 .submit-btn {
     width: 100%;
-    background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+    background: linear-gradient(135deg, #9f585e, #9f585e);
     color: white;
     border: none;
     padding: 15px 20px;
@@ -300,7 +299,7 @@ body::before {
 
 .submit-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
+    box-shadow: 0 10px 25px rgba(159, 88, 94, 0.3);
 }
 
 .submit-btn:active {

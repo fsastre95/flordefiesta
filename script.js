@@ -199,6 +199,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (response.success) {
                     // Mostrar mensaje de éxito
                     form.style.display = 'none';
+                    // Ajustar texto según asistencia
+                    const successTitle = successMessage.querySelector('h3');
+                    const successParagraph = successMessage.querySelector('p');
+                    if (successParagraph) {
+                        if (attendance && attendance.value === 'no') {
+                            successParagraph.textContent = '«Gracias por avisar, nos comeremos tu parte 🧁»';
+                        } else {
+                            successParagraph.textContent = 'Tu respuesta ha sido registrada';
+                        }
+                    }
+                    if (successTitle) {
+                        if (attendance && attendance.value === 'no') {
+                            successTitle.textContent = 'Te vamos a extrañar!';
+                        } else {
+                            successTitle.textContent = '¡Nos vemos en la fiesta! 🎊';
+                        }
+                    }
                     successMessage.style.display = 'block';
                     successMessage.style.animation = 'slideUp 0.6s ease-out';
                 } else {
