@@ -187,26 +187,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 timestamp: new Date().toISOString()
             };
 
-            // Enviar a Google Sheets
-            const response = await fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            });
-
-            const result = await response.json();
+            // Enviar a Google Sheets usando JSONP para evitar CORS
+            const script = document.createElement('script');
+            const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
             
-            if (result.success) {
-                // Mostrar mensaje de éxito
-                form.style.display = 'none';
-                successMessage.style.display = 'block';
-                successMessage.style.animation = 'slideUp 0.6s ease-out';
-            } else {
-                throw new Error(result.message);
-            }
+            // Crear función de callback temporal
+            window[callbackName] = function(response) {
+                delete window[callbackName];
+                document.body.removeChild(script);
+                
+                if (response.success) {
+                    // Mostrar mensaje de éxito
+                    form.style.display = 'none';
+                    successMessage.style.display = 'block';
+                    successMessage.style.animation = 'slideUp 0.6s ease-out';
+                } else {
+                    throw new Error(response.message);
+                }
+            };
+            
+            // Crear URL con callback
+            const url = GOOGLE_SCRIPT_URL + '?callback=' + callbackName + '&data=' + encodeURIComponent(JSON.stringify(formData));
+            script.src = url;
+            document.body.appendChild(script);
+            
+            return; // Salir de la función aquí
             
         } catch (error) {
             console.error('Error al enviar datos:', error);
