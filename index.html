@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Asistencia - Cumpleaños</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <div class="header-bg" aria-hidden="true"></div>
+                <div class="header-bg-overlay" aria-hidden="true"></div>
+                <h1>¡Estás invitado!</h1>
+                <p class="subtitle">Los 30 son los nuevos 20</p>
+            </div>
+
+            <div class="event-details">
+                <div class="detail-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Fecha: <strong>Domingo 5 de octubre 2025</strong></span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Hora: <strong>13:00 hs</strong></span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Lugar: <strong>La Paz 1020, Piso 26, SUM 1</strong></span>
+                </div>
+            </div>
+
+            <form id="confirmationForm" class="confirmation-form">
+                <div class="form-group">
+                    <label for="name">Tu nombre completo *</label>
+                    <input type="text" id="name" name="name" required placeholder="Ej: Elsa Pato">
+                </div>
+
+                <div class="form-group">
+                    <label>¿Vas a venir?</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="attendance" value="yes" required>
+                            <span class="radio-custom"></span>
+                            <span class="radio-text">¡Sí, voy a ir! 🎉</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="attendance" value="no" required>
+                            <span class="radio-custom"></span>
+                            <span class="radio-text">No puedo ir 😔</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group" id="accompaniedGroup" style="display: none;">
+                    <label for="accompanied">¿Vienes acompañado? ¿Cuántas personas?</label>
+                    <select id="accompanied" name="accompanied">
+                        <option value="0">Solo yo</option>
+                        <option value="1">+ 1 persona</option>
+                        <option value="2">+ 2 personas</option>
+                        <option value="3">+ 3 personas</option>
+                        <option value="4">+ 4 personas</option>
+                    </select>
+                </div>
+
+                <div id="accompaniedNamesGroup" style="display: none;">
+                    <div class="form-group">
+                        <label>Nombres completos de tus acompañantes *</label>
+                        <div id="accompaniedNamesContainer">
+                            <!-- Los campos se generarán dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Mensaje especial (opcional)</label>
+                    <textarea id="message" name="message" placeholder="¡Déjame un mensaje!"></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i>
+                    Confirmar Asistencia
+                </button>
+            </form>
+
+            <div id="successMessage" class="success-message" style="display: none;">
+                <i class="fas fa-check-circle"></i>
+                <h3>¡Gracias por confirmar!</h3>
+                <p>Tu respuesta ha sido registrada. ¡Nos vemos en la fiesta! 🎊</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
