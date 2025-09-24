@@ -201,52 +201,64 @@
     </style>
 </head>
 <body>
-    <div class="admin-container">
-        <div class="admin-header">
-            <h1><i class="fas fa-chart-line"></i> Administración de Confirmaciones</h1>
-            <p>Gestiona las respuestas de tus invitados</p>
+    <div id="passwordPrompt" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.98);z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;">
+        <div style="background:white;padding:40px 30px;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,0.15);text-align:center;">
+            <h2>Acceso restringido</h2>
+            <p>Por favor, ingresa la contraseña para acceder</p>
+            <input type="password" id="adminPassword" placeholder="Contraseña" style="padding:10px 15px;border-radius:8px;border:1px solid #ccc;font-size:1rem;margin-bottom:15px;width:100%;max-width:250px;">
+            <br>
+            <button onclick="checkPassword()" style="padding:10px 25px;border-radius:8px;border:none;background:#764ba2;color:white;font-weight:600;font-size:1rem;cursor:pointer;">Entrar</button>
+            <div id="passwordError" style="color:#dc3545;margin-top:10px;display:none;">Contraseña incorrecta</div>
         </div>
+    </div>
+    <div id="adminContent" style="display:none;">
+        <div class="admin-container">
+            <div class="admin-header">
+                <h1><i class="fas fa-chart-line"></i> Administración de Confirmaciones</h1>
+                <p>Gestiona las respuestas de tus invitados</p>
+            </div>
 
-        <div class="action-buttons">
-            <button class="btn btn-primary" onclick="refreshData()">
-                <i class="fas fa-sync-alt"></i> Actualizar
-            </button>
-            <button class="btn btn-success" onclick="exportData()">
-                <i class="fas fa-download"></i> Exportar JSON
-            </button>
-            <button class="btn btn-success" onclick="exportCSV()">
-                <i class="fas fa-file-csv"></i> Exportar CSV
-            </button>
-            <button class="btn btn-danger" onclick="clearData()">
-                <i class="fas fa-trash"></i> Limpiar Datos
-            </button>
-        </div>
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="refreshData()">
+                    <i class="fas fa-sync-alt"></i> Actualizar
+                </button>
+                <button class="btn btn-success" onclick="exportData()">
+                    <i class="fas fa-download"></i> Exportar JSON
+                </button>
+                <button class="btn btn-success" onclick="exportCSV()">
+                    <i class="fas fa-file-csv"></i> Exportar CSV
+                </button>
+                <button class="btn btn-danger" onclick="clearData()">
+                    <i class="fas fa-trash"></i> Limpiar Datos
+                </button>
+            </div>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number" id="totalConfirmations">0</div>
-                <div class="stat-label">Total Respuestas</div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalConfirmations">0</div>
+                    <div class="stat-label">Total Respuestas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="yesConfirmations">0</div>
+                    <div class="stat-label">Van a Ir</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="noConfirmations">0</div>
+                    <div class="stat-label">No Pueden Ir</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalGuests">0</div>
+                    <div class="stat-label">Total Invitados</div>
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-number" id="yesConfirmations">0</div>
-                <div class="stat-label">Van a Ir</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="noConfirmations">0</div>
-                <div class="stat-label">No Pueden Ir</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="totalGuests">0</div>
-                <div class="stat-label">Total Invitados</div>
-            </div>
-        </div>
 
-        <div class="confirmations-list">
-            <h3><i class="fas fa-list"></i> Lista de Confirmaciones</h3>
-            <div id="confirmationsContainer">
-                <div class="no-data">
-                    <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.3;"></i>
-                    <p>No hay confirmaciones aún</p>
+            <div class="confirmations-list">
+                <h3><i class="fas fa-list"></i> Lista de Confirmaciones</h3>
+                <div id="confirmationsContainer">
+                    <div class="no-data">
+                        <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.3;"></i>
+                        <p>No hay confirmaciones aún</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -447,6 +459,21 @@
                 setTimeout(() => notification.remove(), 300);
             }, 3000);
         }
+
+        function checkPassword() {
+            const input = document.getElementById('adminPassword').value;
+            if (input === 'Flowers0929') {
+                document.getElementById('passwordPrompt').style.display = 'none';
+                document.getElementById('adminContent').style.display = '';
+            } else {
+                document.getElementById('passwordError').style.display = 'block';
+            }
+        }
+        // Al cargar, solo mostrar el formulario de contraseña
+        window.onload = function() {
+            document.getElementById('passwordPrompt').style.display = 'flex';
+            document.getElementById('adminContent').style.display = 'none';
+        };
 
         // Cargar datos al iniciar
         loadData();
